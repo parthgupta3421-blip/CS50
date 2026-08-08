@@ -67,35 +67,79 @@
 // forth assignment full mario pyramid 
 
 
-#include <stdio.h>
-#include <cs50.h>
+// #include <stdio.h>
+// #include <cs50.h>
 
-int main (void)
-{
-    int height;
-    do 
-    {
-        height = get_int("Enter your height: ");
-    }
-    while (height < 1);
+// int main (void)
+// {
+//     int height;
+//     do 
+//     {
+//         height = get_int("Enter your height: ");
+//     }
+//     while (height < 1);
 
-    for (int i = 0 ;i < height; i++)
-    {
+//     for (int i = 0 ;i < height; i++)
+//     {
 
-        for (int j = 0; j<height-i-1;j++)
-        {
-            printf(" ");
-        }
-        for(int j = 0; j<i+1;j++)
-        {
-            printf("#");
-        }
-        printf("  ");
+//         for (int j = 0; j<height-i-1;j++)
+//         {
+//             printf(" ");
+//         }
+//         for(int j = 0; j<i+1;j++)
+//         {
+//             printf("#");
+//         }
+//         printf("  ");
         
-        for(int j=0; j<i + 1;j++)
-        {
-            printf("#");
-        }    
-        printf("\n");
-    }  
-}      
+//         for(int j=0; j<i + 1;j++)
+//         {
+//             printf("#");
+//         }    
+//         printf("\n");
+//     }  
+// }      
+
+
+
+// this is the fifth problem named as the cash lets start 
+
+
+// #include <cs50.h>
+// #include <stdio.h>
+
+// int main (void)
+// {
+//     int cents;
+//     do 
+//     {
+//         cents = get_int("Enter your money: ");
+//     }
+//     while (cents<0);
+//     int coins = 0;
+    
+//     
+//         if (cents>=25)
+//         {
+//             coins += cents/25;
+//             cents = cents%25;
+//         }
+//         if (cents>=10)
+//         {
+//             coins += cents/10;
+//             cents = cents%10;
+//         }
+//         if(cents>=5)
+//         {
+//             coins += cents/5;
+//             cents = cents%5;
+//         }
+//         if (cents>=1)
+//         {
+//             coins += cents/1;
+//             cents = cents%1;
+//         }
+
+//     }
+//     printf("%i\n",coins);
+// }
