@@ -143,3 +143,90 @@
 //     }
 //     printf("%i\n",coins);
 // }
+
+//this is my fifth part of the pset 
+
+
+// #include <stdio.h>
+// #include <cs50.h>
+
+// int main (void)
+// {
+//     long number;
+//     do
+//     {
+//         number = get_long("Enter your credit card number:  ");
+//     }
+//     while(number<0);
+
+//     long temp=number;
+//     int digit=0;
+//     while(temp>0)
+//     {
+//         temp=temp/10;
+//         digit++;
+//     }
+
+//     long first_two=number;
+//     while (first_two>99)
+//     {
+//         first_two=first_two/10;
+//     }
+  
+//     int first_digit = first_two/10;
+
+//     int sum=0;
+//     int position = 0;
+//     while (number>0)
+//     {
+        
+//         long digits = number%10;
+//         number = number/10;
+//         if (position%2==0)
+//         {
+//             sum+=digits;
+//         }
+//         else
+//         {
+//             int doubled = digits*2;
+//             int second = doubled %10;
+//             int first = doubled/10;
+
+//             sum += first + second;
+//         }
+//         position++;
+        
+
+//     }
+//     if (sum%10==0)
+//     {
+//         printf("Valid credit card\n");
+//     }    
+//     if (digit == 15 && (first_two == 34 || first_two == 37))
+//     {
+//         printf("AMEX\n");
+//     }
+//     else if (digit == 16 && (first_two >= 51 && first_two <= 55))
+//     {
+//         printf("MASTERCARD\n");
+//     }
+//     else if ((digit == 13|| digit ==16) && first_digit==4)
+//     {
+//         printf("VISA\n");
+//     }
+
+//     else
+//     {
+//         printf("invaid\n");
+//     }
+// }
+
+
+
+
+
+// i funally completed the full proramme of the pset 1 
+
+
+
+
