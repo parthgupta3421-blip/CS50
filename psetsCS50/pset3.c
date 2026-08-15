@@ -70,205 +70,216 @@
 
 // lets go for the second programme
 
-// #include <cs50.h>
-// #include <stdio.h>
-// #include <string.h>
+#include <cs50.h>
+#include <stdio.h>
+#include <string.h>
 
-// #define MAX 9
+#define MAX 9
 
-// typedef struct
-// {
-//     string name;
-//     int votes;
-//     bool eliminated;
-// } candidate;
+typedef struct
+{
+    string name;
+    int votes;
+    bool eliminated;
+} candidate;
 
-// candidate candidates[MAX];
+candidate candidates[MAX];
 
-// int candidate_count;
-// int voter_count;
+int candidates_count;
+int voters_count;
 
-// int preferences[MAX][MAX];
+int preferences[MAX][MAX];
 
-// bool vote(int voter, int rank, string name);
-// void tabulate(void);
-// bool print_winner(void);
-// int find_min(void);
-// bool is_tie(int min);
-// void eliminate(int min);
+bool vote(int voter, int rank, string name);
+void tabulate(void);
+bool print_winner(void);
+int find_min(void);
+bool is_tie(int min);
+void eliminate(int min);
 
-// int main(int argc, string argv[])
-// {
-//     if (argc < 2)
-//     {
-//         printf("Usage: runoff [candidate ...]\n");
-//         return 1;
-//     }
+int main(int argc, string argv[])
+{
+    if (argc < 2)
+    {
+        printf("Invalid input. Try ./runoff [candidates...]\n");
+        return 1;
+    }
 
-//     candidate_count = argc - 1;
+    candidates_count = argc - 1;
 
-//     if (candidate_count > MAX)
-//     {
-//         return 1;
-//     }
+    if (candidates_count > MAX)
+    {
+        printf("Maximum number of candidates is %i\n", MAX);
+        return 2;
+    }
 
-//     for (int i = 0; i < candidate_count; i++)
-//     {
-//         candidates[i].name = argv[i + 1];
-//         candidates[i].votes = 0;
-//         candidates[i].eliminated = false;
-//     }
+    for (int i = 0; i < candidates_count; i++)
+    {
+        candidates[i].name = argv[i + 1];
+        candidates[i].votes = 0;
+        candidates[i].eliminated = false;
+    }
 
-//     voter_count = get_int("Number of voters: ");
+    voters_count = get_int("Enter the number of voters: ");
 
-//     if (voter_count > MAX)
-//     {
-//         return 1;
-//     }
+    if (voters_count > MAX)
+    {
+        printf("Maximum number of voters is %i\n", MAX);
+        return 2;
+    }
 
-//     for (int i = 0; i < voter_count; i++)
-//     {
-//         for (int j = 0; j < candidate_count; j++)
-//         {
-//             string name = get_string("Rank %i: ", j + 1);
+    for (int i = 0; i < voters_count; i++)
+    {
+        for (int j = 0; j < candidates_count; j++)
+        {
+            string name = get_string("Rank %i: ", j + 1);
 
-//             if (!vote(i, j, name))
-//             {
-//                 printf("Invalid vote.\n");
-//                 return 1;
-//             }
-//         }
-//     }
+            if (!vote(i, j, name))
+            {
+                printf("Invalid vote!\n");
+                return 3;
+            }
+        }
+    }
 
-//     while (true)
-//     {
-//         // Reset votes before counting this round
-//         for (int i = 0; i < candidate_count; i++)
-//         {
-//             candidates[i].votes = 0;
-//         }
+    while (true)
+    {
+        // Reset votes for this round
+        for (int i = 0; i < candidates_count; i++)
+        {
+            candidates[i].votes = 0;
+        }
 
-//         tabulate();
+        // Count votes
+        tabulate();
 
-//         if (print_winner())
-//         {
-//             break;
-//         }
+        // Check for a winner
+        if (print_winner())
+        {
+            break;
+        }
 
-//         int min = find_min();
+        // Find the minimum number of votes
+        int min = find_min();
 
-//         if (is_tie(min))
-//         {
-//             for (int i = 0; i < candidate_count; i++)
-//             {
-//                 if (!candidates[i].eliminated)
-//                 {
-//                     printf("%s\n", candidates[i].name);
-//                 }
-//             }
+        // Check for a tie
+        if (is_tie(min))
+        {
+            for (int i = 0; i < candidates_count; i++)
+            {
+                if (!candidates[i].eliminated)
+                {
+                    printf("%s\n", candidates[i].name);
+                }
+            }
 
-//             break;
-//         }
+            break;
+        }
 
-//         eliminate(min);
-//     }
+        // Eliminate candidate(s)
+        eliminate(min);
+    }
 
-//     return 0;
-// }
+    return 0;
+}
 
-// bool vote(int voter, int rank, string name)
-// {
-//     for (int i = 0; i < candidate_count; i++)
-//     {
-//         if (strcmp(candidates[i].name, name) == 0)
-//         {
-//             // I ADDED THIS TO CHECK THE DUPLICATE VOTING IN THE ELECTION OTHERWISE THE RAHUL GANDHI WILL BE SAD 
-//             for (int j = 0; j < rank; j++)
-//             {
-//                 if (preferences[voter][j]==i)
-//                 {
-//                     return false;
-//                 }
-//             }
+bool vote(int voter, int rank, string name)
+{
+    for (int i = 0; i < candidates_count; i++)
+    {
+        // Find the candidate
+        if (strcmp(candidates[i].name, name) == 0)
+        {
+            // Check for duplicate ranking
+            for (int j = 0; j < rank; j++)
+            {
+                if (preferences[voter][j] == i)
+                {
+                    return false;
+                }
+            }
 
-//             preferences[voter][rank] = i;
-//             return true;
-//         }
-//     }
+            // Store candidate index
+            preferences[voter][rank] = i;
 
-//     return false;
-// }
+            return true;
+        }
+    }
 
-// void tabulate(void)
-// {
-//     for (int i = 0; i < voter_count; i++)
-//     {
-//         for (int j = 0; j < candidate_count; j++)
-//         {
-//             int candidate_index = preferences[i][j];
+    // Candidate doesn't exist
+    return false;
+}
 
-//             if (!candidates[candidate_index].eliminated)
-//             {
-//                 candidates[candidate_index].votes++;
-//                 break;
-//             }
-//         }
-//     }
-// }
+void tabulate(void)
+{
+    for (int i = 0; i < voters_count; i++)
+    {
+        for (int j = 0; j < candidates_count; j++)
+        {
+            int candidate_index = preferences[i][j];
 
-// bool print_winner(void)
-// {
-//     for (int i = 0; i < candidate_count; i++)
-//     {
-//         if (!candidates[i].eliminated &&
-//             candidates[i].votes > voter_count / 2)
-//         {
-//             printf("THE WINNER OF THE ELECTION IS: %s\n", candidates[i].name);
-//             return true;
-//         }
-//     }
+            if (!candidates[candidate_index].eliminated)
+            {
+                candidates[candidate_index].votes++;
+                break;
+            }
+        }
+    }
+}
 
-//     return false;
-// }
+bool print_winner(void)
+{
+    for (int i = 0; i < candidates_count; i++)
+    {
+        if (!candidates[i].eliminated &&
+            candidates[i].votes > voters_count / 2)
+        {
+            printf("Winner is: %s\n", candidates[i].name);
+            return true;
+        }
+    }
 
-// int find_min(void)
-// {
-//     int min = voter_count;
+    return false;
+}
 
-//     for (int i = 0; i < candidate_count; i++)
-//     {
-//         if (!candidates[i].eliminated &&
-//             candidates[i].votes < min)
-//         {
-//             min = candidates[i].votes;
-//         }
-//     }
+int find_min(void)
+{
+    int min = voters_count;
 
-//     return min;
-// }
+    for (int i = 0; i < candidates_count; i++)
+    {
+        if (!candidates[i].eliminated &&
+            candidates[i].votes < min)
+        {
+            min = candidates[i].votes;
+        }
+    }
 
-// bool is_tie(int min)
-// {
-//     for (int i = 0; i < candidate_count; i++)
-//     {
-//         if (!candidates[i].eliminated &&
-//             candidates[i].votes != min)
-//         {
-//             return false;
-//         }
-//     }
+    return min;
+}
 
-//     return true;
-// }
+bool is_tie(int min)
+{
+    for (int i = 0; i < candidates_count; i++)
+    {
+        if (!candidates[i].eliminated &&
+            candidates[i].votes != min)
+        {
+            return false;
+        }
+    }
 
-// void eliminate(int min)
-// {
-//     for (int i = 0; i < candidate_count; i++)
-//     {
-//         if (!candidates[i].eliminated &&
-//             candidates[i].votes == min)
-//         {
-//             candidates[i].eliminated = true;
-//         }
-//     }
-// }
+    return true;
+}
+
+void eliminate(int min)
+{
+    for (int i = 0; i < candidates_count; i++)
+    {
+        if (!candidates[i].eliminated &&
+            candidates[i].votes == min)
+        {
+            candidates[i].eliminated = true;
+        }
+    }
+}
