@@ -1,55 +1,59 @@
-// Modifies the volume of an audio file
+// // Modifies the volume of an audio file
 
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+// #include <stdint.h>
+// #include <stdio.h>
+// #include <stdlib.h>
 
-// Number of bytes in .wav header
-typedef uint8_t BYTE;
+// // Number of bytes in .wav header
+// typedef uint8_t BYTE;
 
-int main(int argc, char *argv[])
-{
-    // Check command-line arguments
-    if (argc != 4)
-    {
-        printf("Usage: ./volume input.wav output.wav factor\n");
-        return 1;
-    }
+// int main(int argc, char *argv[])
+// {
+//     // Check command-line arguments
+//     if (argc != 4)
+//     {
+//         printf("Usage: ./volume input.wav output.wav factor\n");
+//         return 1;
+//     }
 
-    // Open files and determine scaling factor
-    FILE *input = fopen(argv[1], "rb");
-    if (input == NULL)
-    {
-        printf("Could not open file.\n");
-        return 1;
-    }
+//     // Open files and determine scaling factor
+//     FILE *input = fopen(argv[1], "rb");
+//     if (input == NULL)
+//     {
+//         printf("Could not open file.\n");
+//         return 1;
+//     }
 
-    FILE *output = fopen(argv[2], "wb");
-    if (output == NULL)
-    {
-        printf("Could not open file.\n");
-        return 1;
-    }
+//     FILE *output = fopen(argv[2], "wb");
+//     if (output == NULL)
+//     {
+//         printf("Could not open file.\n");
+//         return 1;
+//     }
 
-    float factor = atof(argv[3]);
+//     float factor = atof(argv[3]);
 
-    BYTE HEADER[44];
+//     BYTE HEADER[44];
 
-    fread(HEADER,sizeof(BYTE),44,input);
+//     fread(HEADER,sizeof(BYTE),44,input);
 
-    fwrite(HEADER,sizeof(BYTE),44,output);
+//     fwrite(HEADER,sizeof(BYTE),44,output);
 
-    int16_t BUFFER;
+//     int16_t BUFFER;
     
-    while(fread(&BUFFER,sizeof(int16_t),1,input))
-    {
-        BUFFER*=factor; 
-        fwrite(&BUFFER,sizeof(int16_t),1,output);
-    }
+//     while(fread(&BUFFER,sizeof(int16_t),1,input))
+//     {
+//         BUFFER*=factor; 
+//         fwrite(&BUFFER,sizeof(int16_t),1,output);
+//     }
 
     
 
-    // Close files
-    fclose(input);
-    fclose(output);
-}
+//     // Close files
+//     fclose(input);
+//     fclose(output);
+// }
+
+
+// first problem of the pset4 done 
+
